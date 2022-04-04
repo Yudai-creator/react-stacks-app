@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 
+//stacks
+import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+
 export default function Home() {
+
+  //stacks.js auth
+  const appConfig = new AppConfig(['publish_data']);
+  const userSession = new UserSession({ appConfig });
+
   const [message, setMessage] = useState("");
   const [price, setPrice] = useState(5);
   const [userData, setUserData] = useState({});
@@ -18,6 +26,30 @@ export default function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Do Stacks things
+    function authenticate() {
+        showConnect({
+            appDetails: {
+                name: "Sup",
+                icon: "https://assets.website-files.com/618b0aafa4afde65f2fe38fe/618b0aafa4afde2ae1fe3a1f_icon-isotipo.svg",
+            },
+            redirectTo: "/",
+            onFinish: () => {
+                window.location.reload();
+            },
+            userSession,
+        });
+    }
+
+    useEffect(() => {
+        if (userSession.isSignInPending()) {
+            userSession.handlePendingSignIn().then((userData) => {
+                setUserData(userData);
+            });
+        } else if (userSession.isUserSignedIn()) {
+            setLoggedIn(true);
+            setUserData(userSession.loadUserData());
+        }
+    }, []);
   };
 
   return (
@@ -28,6 +60,13 @@ export default function Home() {
       </Head>
 
       <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
+        <div className="flex w-full items-end justify-center">
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-6"
+            onClick={() => authenticate()}
+          >Connect to Wallet
+          </button>
+        </div>
         <h1 className="text-6xl font-bold mb-24">Sup</h1>
         <form onSubmit={handleSubmit}>
           <p>
