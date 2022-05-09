@@ -1,9 +1,11 @@
 
 ;; sup
-;; <add a description here>
+;; Smart contract to handle writing a message to the blockchain
+;; in exchange for a small fee in STX
 
 ;; constants
 
+;; my wallet SP2SSXVE9VR65TZ8EWC5BRBYHTCXENZ5Y8S0P3WWJ
 (define-constant receiver-address 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
 
 ;;
